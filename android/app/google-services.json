@@ -1,59 +1,21 @@
 {
   "project_info": {
-    "project_number": "982312685420",
-    "project_id": "deveinance",
-    "storage_bucket": "deveinance.firebasestorage.app"
+    "project_number": "658350840932",
+    "project_id": "healthy-spread",
+    "storage_bucket": "healthy-spread.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:982312685420:android:4e684dbcd2275c1b466d49",
+        "mobilesdk_app_id": "1:658350840932:android:c9cfc3595a8d4750d51371",
         "android_client_info": {
-          "package_name": "com.devefinance"
+          "package_name": "com.healthyspread"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAzs97JOW0Fz-61-oCUtH41HPxcBSihUOE"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:982312685420:android:9f5394fb220f4114466d49",
-        "android_client_info": {
-          "package_name": "com.devefinance.delivery"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAzs97JOW0Fz-61-oCUtH41HPxcBSihUOE"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:982312685420:android:3b216fe6b1f67bfe466d49",
-        "android_client_info": {
-          "package_name": "com.devefinancestore"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAzs97JOW0Fz-61-oCUtH41HPxcBSihUOE"
+          "current_key": "AIzaSyDQj42pULARhRsu2a4kSnpcsmYT3NLIPZc"
         }
       ],
       "services": {

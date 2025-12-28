@@ -1,4 +1,4 @@
-package com.devefinancestore
+package com.healthyspread
 
 import android.content.ContentValues
 import android.net.Uri
