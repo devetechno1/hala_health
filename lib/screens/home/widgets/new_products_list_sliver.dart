@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import '../../../app_config.dart';
 import '../../../data_model/product_mini_response.dart';
 import '../../../presenter/home_provider.dart';
-import '../../product/featured_products.dart';
 import '../../product/new_products.dart';
 import 'featured_products/custom_horizontal_products_list_widget.dart';
 

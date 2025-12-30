@@ -114,6 +114,7 @@ class PagedView<T> extends StatefulWidget {
     this.responsiveGrid = true,
     this.minTileWidth = 180,
     this.useResponsiveAspectRatio = true,
+    this.usePrimaryScrollController = false,
   });
 
   // Data
@@ -151,13 +152,20 @@ class PagedView<T> extends StatefulWidget {
   final bool responsiveGrid;
   final double minTileWidth;
   final bool useResponsiveAspectRatio;
+  final bool usePrimaryScrollController;
 
   @override
   State<PagedView<T>> createState() => _PagedViewState<T>();
 }
 
 class _PagedViewState<T> extends State<PagedView<T>> {
-  final ScrollController _scrollController = ScrollController();
+  ScrollController? _localScrollController;
+  ScrollController get _scrollController {
+    if (widget.usePrimaryScrollController) {
+      return PrimaryScrollController.of(context);
+    }
+    return _localScrollController!;
+  }
 
   int _page = 1;
   bool _isLoading = true;
@@ -173,9 +181,28 @@ class _PagedViewState<T> extends State<PagedView<T>> {
     super.initState();
     // Attach controller if provided
     widget.controller?._attach(this);
+    if (!widget.usePrimaryScrollController) {
+      _localScrollController = ScrollController();
+    }
     _page = widget.initialPage;
-    _loadFirstPage();
-    _scrollController.addListener(_onScroll);
+
+    // Determine when to listen for scroll events
+    // With PrimaryScrollController, we might need a post-frame callback or
+    // just rely on didChangeDependencies if we want to be safe, but typically
+    // accessing .of(context) in initState is unsafe if we immediately add listener.
+    // However, for typical usage, waiting for build is safer, or adding listener in didChangeDependencies.
+    // simpler: add listener in waiting for frame or rely on manual attach.
+    // actually, let's just do it in didChangeDependencies for primary,
+    // and here for local.
+    if (!widget.usePrimaryScrollController) {
+      _loadFirstPage();
+      _localScrollController!.addListener(_onScroll);
+    } else {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _loadFirstPage();
+        _scrollController.addListener(_onScroll);
+      });
+    }
   }
 
   @override
@@ -308,7 +335,18 @@ class _PagedViewState<T> extends State<PagedView<T>> {
   @override
   void dispose() {
     widget.controller?._detach(this);
-    _scrollController.dispose();
+    if (!widget.usePrimaryScrollController) {
+      _localScrollController?.removeListener(_onScroll);
+      _localScrollController?.dispose();
+    } else {
+      // We don't own the primary controller, but we should remove our listener
+      try {
+        // It might be disposed already, but good practice to try removing listener
+        _scrollController.removeListener(_onScroll);
+      } catch (e) {
+        // ignore
+      }
+    }
     super.dispose();
   }
 
@@ -417,8 +455,14 @@ class _PagedViewState<T> extends State<PagedView<T>> {
 
   @override
   Widget build(BuildContext context) {
+    // If using primary scroll controller, we must set primary: true and controller: null
+    final bool isPrimary = widget.usePrimaryScrollController;
+    final ScrollController? controllerToUse =
+        isPrimary ? null : _scrollController;
+
     final body = CustomScrollView(
-      controller: _scrollController,
+      controller: controllerToUse,
+      primary: isPrimary,
       physics: widget.physics ?? const AlwaysScrollableScrollPhysics(),
       slivers: [
         if (_isLoading)

@@ -171,7 +171,7 @@ class HomeProvider extends ChangeNotifier {
   Future<void> fetchTodayDealData() async {
     productMini.ProductMiniResponse? deal;
     await executeAndHandleErrors(
-        () async => deal = await ProductRepository().getTodaysDealProducts());
+        () async => deal = await ProductRepository().getTodaysDealProducts(paginate: ""));
 
     // print(deal.products!.length);
     // if (deal.success! && deal.products!.isNotEmpty) {
@@ -357,7 +357,7 @@ class HomeProvider extends ChangeNotifier {
     showBestSellingLoadingContainer = true;
     productMini.ProductMiniResponse? bestselling;
     await executeAndHandleErrors(() async =>
-        bestselling = await ProductRepository().getBestSellingProducts());
+        bestselling = await ProductRepository().getBestSellingProducts(paginate: 10));
     bestSellingProductList.clear();
     bestSellingProductList.addAll(bestselling?.products ?? []);
     showBestSellingLoadingContainer = false;
@@ -371,7 +371,7 @@ class HomeProvider extends ChangeNotifier {
     showDiscountedLoadingContainer = true;
     productMini.ProductMiniResponse? discountproducts;
     await executeAndHandleErrors(() async =>
-        discountproducts = await ProductRepository().getDiscountProducts());
+        discountproducts = await ProductRepository().getDiscountProducts(paginate: 10));
     discountedProductList.clear();
     discountedProductList.addAll(discountproducts?.products ?? []);
     showDiscountedLoadingContainer = false;
@@ -415,7 +415,7 @@ class HomeProvider extends ChangeNotifier {
   Future<void> fetchTodayDealProducts() async {
     productMini.ProductMiniResponse? deals;
     await executeAndHandleErrors(
-        () async => deals = await ProductRepository().getTodaysDealProducts());
+        () async => deals = await ProductRepository().getTodaysDealProducts(paginate: 10));
     TodayDealList.clear();
     TodayDealList.addAll(deals?.products ?? []);
     isTodayDealInitial = false;
@@ -541,7 +541,8 @@ class HomeProvider extends ChangeNotifier {
     productMini.ProductMiniResponse? productResponse;
     await executeAndHandleErrors(() async =>
         productResponse = await ProductRepository().getFeaturedProducts(
-          page: featuredProductPage,
+         // page: featuredProductPage,
+          paginate: 10,
         ));
 
     featuredProductPage++;

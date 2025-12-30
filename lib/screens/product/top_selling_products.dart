@@ -18,18 +18,14 @@ class TopSellingProducts extends StatefulWidget {
 }
 
 class _TopSellingProductsState extends State<TopSellingProducts> {
-  Future<PageResult<Product>> _fetchProducts(int page) async {
-    try {
-      final ProductMiniResponse res =
-          await ProductRepository().getBestSellingProducts();
-      if (res.success != true) throw "Not Success";
-      final List<Product> list = res.products ?? [];
-      return PageResult<Product>(data: list, hasMore: false);
-    } catch (_) {
-      return const PageResult<Product>(data: [], hasMore: false);
-    }
-  }
 
+Future<PageResult<Product>> _fetchProducts(int page) async {
+  final res = await ProductRepository().getBestSellingProducts(page: page);
+  if (res.success != true) throw "Not Success";
+  final list = res.products ?? [];
+  final hasMore = list.isNotEmpty; 
+  return PageResult<Product>(data: list, hasMore: hasMore);
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
